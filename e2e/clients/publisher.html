@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LiveKit AV1 E2EE Publisher</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 16px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin: 10px 0;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        color: #333;
+      }
+      input,
+      select,
+      textarea {
+        font: inherit;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        min-width: 280px;
+      }
+      textarea {
+        min-height: 72px;
+        width: min(900px, 100%);
+      }
+      button {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      video {
+        width: 480px;
+        max-width: 100%;
+        background: #111;
+      }
+      pre {
+        margin-top: 12px;
+        padding: 12px;
+        background: #0b0b0b;
+        color: #eee;
+        border-radius: 8px;
+        overflow: auto;
+        max-height: 40vh;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Publisher (AV1 → E2EE)</h1>
+
+    <div class="row">
+      <label>
+        Server URL
+        <input id="serverUrl" placeholder="ws://127.0.0.1:7880" />
+      </label>
+      <label>
+        Codec
+        <select id="codec">
+          <option value="av1">av1</option>
+          <option value="vp9">vp9</option>
+          <option value="vp8">vp8</option>
+          <option value="h264">h264</option>
+        </select>
+      </label>
+      <label style="flex-direction: row; align-items: center; gap: 8px; margin-top: 18px">
+        <input id="singlePc" type="checkbox" />
+        Single PC
+      </label>
+      <label>
+        E2EE Key
+        <input id="e2eeKey" placeholder="password" />
+      </label>
+    </div>
+
+    <div class="row">
+      <label>
+        API Key (dev mode default: devkey)
+        <input id="apiKey" placeholder="devkey" />
+      </label>
+      <label>
+        API Secret (dev mode default: secret)
+        <input id="apiSecret" placeholder="secret" />
+      </label>
+      <label>
+        Room
+        <input id="roomName" placeholder="av1-e2ee" />
+      </label>
+      <label>
+        Identity
+        <input id="identity" placeholder="publisher" />
+      </label>
+      <button id="generateToken" type="button">Generate token</button>
+    </div>
+
+    <div class="row">
+      <label style="flex: 1 1 auto">
+        Token
+        <textarea id="token" placeholder="Paste token here or use Generate token"></textarea>
+      </label>
+    </div>
+
+    <div class="row">
+      <button id="connect" type="button">Connect</button>
+      <button id="disconnect" type="button">Disconnect</button>
+      <button id="publishCamera" type="button">Publish (camera)</button>
+      <label>
+        Video file
+        <input id="videoFile" type="file" accept="video/*" />
+      </label>
+      <button id="publishFile" type="button">Publish (file)</button>
+    </div>
+
+    <video id="source" muted playsinline loop controls></video>
+    <pre id="state"></pre>
+    <pre id="log"></pre>
+
+    <!-- Build outputs are required for "plain server" usage: `pnpm -C client-sdk-js build` -->
+    <script src="../../dist/livekit-client.umd.js"></script>
+    <script src="./shared.js"></script>
+    <script src="./publisher.js"></script>
+  </body>
+</html>
